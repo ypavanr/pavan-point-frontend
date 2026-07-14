@@ -2,31 +2,13 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Highlight from '@tiptap/extension-highlight';
-import TextAlign from '@tiptap/extension-text-align';
 import { X, Download, Save, FileText } from 'lucide-react';
 import clsx from 'clsx';
 import api from '@/lib/api';
 import NoteToolbar from './NoteToolbar';
-import html2pdf from 'html2pdf.js';
+import { createNoteExtensions, EMPTY_DOC } from '@/lib/noteEditorExtensions';
+import { exportNoteAsPdf } from '@/lib/notePdfExport';
 
-const EXTENSIONS = [
-    StarterKit.configure({
-        blockquote: false,
-        code: false,
-        codeBlock: false,
-        horizontalRule: false,
-        link: false,
-        heading: { levels: [1, 2, 3] },
-    }),
-    Underline,
-    Highlight.configure({ multicolor: true }),
-    TextAlign.configure({ types: ['heading', 'paragraph'] }),
-];
-
-const EMPTY_DOC = { type: 'doc', content: [{ type: 'paragraph' }] };
 const AUTOSAVE_DELAY_MS = 1500;
 
 function SaveIndicator({ saveState }) {
@@ -46,13 +28,13 @@ function SaveIndicator({ saveState }) {
 export default function NoteEditorBody({ note, isMaster, onClose, onSaved }) {
     const [title, setTitle] = useState(note.title);
     const [saveState, setSaveState] = useState('saved');
+    const [isExporting, setIsExporting] = useState(false);
     const dirtyRef = useRef(false);
     const saveTimerRef = useRef(null);
     const latestRef = useRef({ title: note.title, contentJson: note.content_json });
-    const contentRef = useRef(null);
 
     const editor = useEditor({
-        extensions: EXTENSIONS,
+        extensions: createNoteExtensions({ editable: isMaster }),
         content: note.content_json || EMPTY_DOC,
         editable: isMaster,
         immediatelyRender: false,
@@ -113,18 +95,14 @@ export default function NoteEditorBody({ note, isMaster, onClose, onSaved }) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [handleClose]);
 
-    const handleDownloadPdf = () => {
-        const element = document.querySelector('.tiptap-content .ProseMirror');
-        if (!element) return;
-        
-        const opt = {
-            margin:       0.5,
-            filename:     `${title || 'note'}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
+    const handleDownloadPdf = async () => {
+        if (!editor || isExporting) return;
+        setIsExporting(true);
+        try {
+            await exportNoteAsPdf({ title, contentJson: editor.getJSON(), filename: title });
+        } finally {
+            setIsExporting(false);
+        }
     };
 
     return (
@@ -150,7 +128,7 @@ export default function NoteEditorBody({ note, isMaster, onClose, onSaved }) {
                             <Save size={20} />
                         </button>
                     )}
-                    <button onClick={handleDownloadPdf} className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition" title="Download as PDF">
+                    <button onClick={handleDownloadPdf} disabled={isExporting} className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition disabled:opacity-40" title="Download as PDF">
                         <Download size={20} />
                     </button>
                     <button onClick={handleClose} className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition" title="Close">
