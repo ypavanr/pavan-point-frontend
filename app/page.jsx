@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, Suspense } from 'react';
 import { useAuth } from '@/lib/auth';
 import api from '@/lib/api';
 import Sidebar from '@/components/Sidebar';
@@ -28,7 +28,7 @@ const formatBytes = (bytes) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
-export default function DrivePage() {
+function DriveContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const folderParam = searchParams.get('folder');
@@ -819,5 +819,13 @@ export default function DrivePage() {
                 <LogsModal isOpen={logsModalOpen} onClose={() => setLogsModalOpen(false)} />
             )}
         </div>
+    );
+}
+
+export default function DrivePage() {
+    return (
+        <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 text-gray-500">Loading...</div>}>
+            <DriveContent />
+        </Suspense>
     );
 }
