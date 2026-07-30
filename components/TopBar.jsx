@@ -1,8 +1,8 @@
-import { Search, LayoutGrid, List, LogOut, Info, History } from 'lucide-react';
+import { Search, LayoutGrid, List, LogOut, Info, History, Shield, User, Eye } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 
 export default function TopBar({ searchQuery, setSearchQuery, viewMode, setViewMode, onInfoClick, onLogsClick }) {
-    const { logout, isMaster } = useAuth();
+    const { logout, isMaster, user } = useAuth();
 
     return (
         <div className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-4 flex-shrink-0">
@@ -27,6 +27,16 @@ export default function TopBar({ searchQuery, setSearchQuery, viewMode, setViewM
             </div>
 
             <div className="flex items-center justify-end w-1/3 space-x-2 pr-4">
+                {user && (
+                    <div className="hidden sm:flex items-center bg-gray-100 rounded-full pl-1.5 pr-3 py-1 mr-2 border border-gray-200">
+                        <div className={`p-1.5 rounded-full mr-2 ${user.role === 'master' ? 'bg-blue-100 text-blue-600' : user.role === 'peepee' ? 'bg-purple-100 text-purple-600' : 'bg-green-100 text-green-600'}`}>
+                            {user.role === 'master' ? <Shield size={14} /> : user.role === 'peepee' ? <User size={14} /> : <Eye size={14} />}
+                        </div>
+                        <span className="text-sm font-medium text-gray-700 capitalize max-w-[120px] truncate">
+                            {user.username || user.role}
+                        </span>
+                    </div>
+                )}
                 {isMaster && (
                     <button
                         className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition"
