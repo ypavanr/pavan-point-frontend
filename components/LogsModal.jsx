@@ -17,7 +17,7 @@ export default function LogsModal({ isOpen, onClose }) {
 
     if (!isOpen) return null;
 
-    const formatDate = (iso) => new Date(iso).toLocaleString();
+    const formatDate = (iso) => new Date(iso.endsWith('Z') ? iso : iso + 'Z').toLocaleString();
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
