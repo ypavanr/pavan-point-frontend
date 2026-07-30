@@ -205,7 +205,7 @@ function DriveContent() {
 
     const handleUploadFiles = async (files) => {
         if (!isMaster) return;
-        const fileArray = Array.from(files);
+        const fileArray = Array.from(files).filter(f => !f.name.startsWith('.'));
         const newUploads = fileArray.map((file) => ({
             id: crypto.randomUUID(),
             filename: file.name,
@@ -238,7 +238,7 @@ function DriveContent() {
 
     const handleUploadFolder = async (files) => {
         if (!isMaster) return;
-        const fileArray = Array.from(files).filter((f) => f.webkitRelativePath);
+        const fileArray = Array.from(files).filter((f) => f.webkitRelativePath && !f.name.startsWith('.'));
         if (fileArray.length === 0) return;
 
         // Maps a relative directory path (e.g. "Vacation/2024") to its resolved folder id.
