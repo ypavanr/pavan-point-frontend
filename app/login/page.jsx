@@ -29,7 +29,7 @@ export default function LoginPage() {
                     <p className="text-gray-500 mt-2">to continue to Drive</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-1 p-1 mb-6 bg-gray-100 rounded-lg">
+                <div className="grid grid-cols-3 gap-1 p-1 mb-6 bg-gray-100 rounded-lg">
                     <button
                         type="button"
                         onClick={() => { setRole('master'); setError(''); }}
@@ -49,6 +49,16 @@ export default function LoginPage() {
                         )}
                     >
                         Viewer
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => { setRole('peepee'); setError(''); }}
+                        className={clsx(
+                            "py-2 text-sm font-medium rounded-md transition",
+                            role === 'peepee' ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                        )}
+                    >
+                        Peepee
                     </button>
                 </div>
 
@@ -81,7 +91,7 @@ export default function LoginPage() {
                         type="submit"
                         className="w-full py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition"
                     >
-                        Sign in as {role === 'master' ? 'Master' : 'Viewer'}
+                        Sign in as {role.charAt(0).toUpperCase() + role.slice(1)}
                     </button>
                 </form>
             </div>
