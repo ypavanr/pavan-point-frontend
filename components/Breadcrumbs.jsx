@@ -22,7 +22,7 @@ export default function Breadcrumbs({ breadcrumbs, currentFolder, onNavigate }) 
                 </div>
             ))}
             
-            {currentFolder && (
+            {currentFolder && currentFolder.id !== 'root' && (
                 <div className="flex items-center space-x-1">
                     <ChevronRight size={18} className="text-gray-400" />
                     <span className="px-2 py-1 font-medium">{currentFolder.name}</span>
