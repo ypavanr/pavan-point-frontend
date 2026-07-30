@@ -576,6 +576,11 @@ function DriveContent() {
                             e.removed.forEach(el => newSet.delete(el.dataset.id));
                             setSelectedItems(newSet);
                         }}
+                        onDragStart={(e) => {
+                            if (e.inputEvent.target.closest('button') || e.inputEvent.target.closest('.sticky')) {
+                                e.stop();
+                            }
+                        }}
                     />
 
                     {isSearching ? (
