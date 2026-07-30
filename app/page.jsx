@@ -12,7 +12,7 @@ import PreviewModal from '@/components/PreviewModal';
 import NoteEditorModal from '@/components/NoteEditorModal';
 import NewFolderModal from '@/components/NewFolderModal';
 import MoveModal from '@/components/MoveModal';
-import { Folder, Image as ImageIcon, Film, File as FileIcon, FileText, CheckSquare, SearchX, Lock } from 'lucide-react';
+import { Folder, Image as ImageIcon, Film, File as FileIcon, FileText, CheckSquare, SearchX, Lock, Play } from 'lucide-react';
 import clsx from 'clsx';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Selecto from 'react-selecto';
@@ -653,7 +653,16 @@ function DriveContent() {
                                         ) : item.isNote ? (
                                             <FileText size={48} className="text-amber-500" />
                                         ) : item.has_thumbnail ? (
-                                            <img src={`${api.defaults.baseURL}/api/files/${item.id}/thumbnail?token=${typeof window !== 'undefined' ? sessionStorage.getItem('token') : ''}`} alt="" className="w-full h-full object-cover" />
+                                            <>
+                                                <img src={`${api.defaults.baseURL}/api/files/${item.id}/thumbnail?token=${typeof window !== 'undefined' ? sessionStorage.getItem('token') : ''}`} alt="" className="w-full h-full object-cover" />
+                                                {item.file_type === 'video' && (
+                                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                                        <div className="bg-black/30 rounded-full p-2 backdrop-blur-sm flex items-center justify-center shadow-sm">
+                                                            <Play className="w-6 h-6 text-white fill-white ml-0.5" />
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </>
                                         ) : (
                                             item.file_type === 'image' ? <ImageIcon size={48} className="text-blue-500" /> :
                                             item.file_type === 'video' ? <Film size={48} className="text-red-500" /> :
