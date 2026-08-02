@@ -7,6 +7,7 @@ import Sidebar from '@/components/Sidebar';
 import TopBar from '@/components/TopBar';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import UploadTray from '@/components/UploadTray';
+import PasteUploadQueue from '@/components/PasteUploadQueue';
 import ContextMenu from '@/components/ContextMenu';
 import PreviewModal from '@/components/PreviewModal';
 import NoteEditorModal from '@/components/NoteEditorModal';
@@ -780,6 +781,7 @@ function DriveContent() {
             </div>
 
             <UploadTray uploads={uploads} setUploads={setUploads} />
+            <PasteUploadQueue onUpload={handleUploadFiles} />
 
             {contextMenu && (
                 <ContextMenu
