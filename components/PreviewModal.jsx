@@ -134,7 +134,10 @@ export default function PreviewModal({ item, allItems, onClose, onDownload, onCo
     return (
         <div className="fixed inset-0 bg-black/90 flex flex-col z-50" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center p-4 text-white">
-                <div className="truncate flex-1 max-w-xl font-medium">{currentItem.original_filename}</div>
+                <div className="truncate flex-1 max-w-xl font-medium">
+                    <div>{currentItem.original_filename}</div>
+                    <div className="text-xs text-gray-400 font-normal mt-0.5">{currentItem.capture_time}</div>
+                </div>
                 <div className="flex items-center space-x-2">
                     {currentItem.file_type === 'image' && (
                         <>
