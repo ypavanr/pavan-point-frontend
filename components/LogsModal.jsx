@@ -2,18 +2,19 @@ import { X, History } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 
-export default function LogsModal({ isOpen, onClose }) {
+export default function LogsModal({ isOpen, onClose, type = 'viewer' }) {
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!isOpen) return;
         setLoading(true);
-        api.get('/api/auth/viewer-logs')
+        const endpoint = type === 'viewer' ? '/api/auth/viewer-logs' : '/api/auth/peepee-logs';
+        api.get(endpoint)
             .then((res) => setLogs(res.data))
             .catch(() => setLogs([]))
             .finally(() => setLoading(false));
-    }, [isOpen]);
+    }, [isOpen, type]);
 
     if (!isOpen) return null;
 
@@ -25,7 +26,7 @@ export default function LogsModal({ isOpen, onClose }) {
                 <div className="flex justify-between items-center p-6 border-b border-gray-100 flex-shrink-0">
                     <h3 className="text-xl font-semibold text-gray-800 flex items-center">
                         <History size={22} className="mr-3 text-blue-500" />
-                        Viewer Login History
+                        {type === 'viewer' ? 'Viewer Login History' : 'Peepee Login History'}
                     </h3>
                     <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition rounded-full p-1 hover:bg-gray-100">
                         <X size={24} />
@@ -36,12 +37,12 @@ export default function LogsModal({ isOpen, onClose }) {
                     {loading ? (
                         <div className="text-center text-gray-400 py-8 text-sm">Loading...</div>
                     ) : logs.length === 0 ? (
-                        <div className="text-center text-gray-400 py-8 text-sm">No viewer logins yet</div>
+                        <div className="text-center text-gray-400 py-8 text-sm">No logins yet</div>
                     ) : (
                         <table className="min-w-full divide-y divide-gray-100">
                             <thead className="bg-gray-50 sticky top-0">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    {type === 'viewer' && <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>}
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP address</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Logged in at</th>
                                 </tr>
@@ -49,7 +50,7 @@ export default function LogsModal({ isOpen, onClose }) {
                             <tbody className="divide-y divide-gray-100">
                                 {logs.map((log, i) => (
                                     <tr key={i}>
-                                        <td className="px-6 py-3 text-sm font-medium text-gray-800">{log.username}</td>
+                                        {type === 'viewer' && <td className="px-6 py-3 text-sm font-medium text-gray-800">{log.username}</td>}
                                         <td className="px-6 py-3 text-sm text-gray-500 font-mono">{log.ip_address || '—'}</td>
                                         <td className="px-6 py-3 text-sm text-gray-500">{formatDate(log.logged_in_at)}</td>
                                     </tr>

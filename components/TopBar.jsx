@@ -1,7 +1,7 @@
 import { Search, LayoutGrid, List, LogOut, Info, History, Shield, User, Eye } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 
-export default function TopBar({ searchQuery, setSearchQuery, viewMode, setViewMode, onInfoClick, onLogsClick }) {
+export default function TopBar({ searchQuery, setSearchQuery, viewMode, setViewMode, onInfoClick, onViewerLogsClick, onPeepeeLogsClick }) {
     const { logout, isMaster, user } = useAuth();
 
     return (
@@ -38,13 +38,22 @@ export default function TopBar({ searchQuery, setSearchQuery, viewMode, setViewM
                     </div>
                 )}
                 {isMaster && (
-                    <button
-                        className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition"
-                        onClick={onLogsClick}
-                        title="Viewer login history"
-                    >
-                        <History size={22} />
-                    </button>
+                    <>
+                        <button
+                            className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition"
+                            onClick={onViewerLogsClick}
+                            title="Viewer login history"
+                        >
+                            <History size={22} />
+                        </button>
+                        <button
+                            className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition"
+                            onClick={onPeepeeLogsClick}
+                            title="Peepee login history"
+                        >
+                            <User size={22} />
+                        </button>
+                    </>
                 )}
                 <button
                     className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition"
