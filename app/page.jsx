@@ -50,8 +50,7 @@ function DriveContent() {
     const [folderModal, setFolderModal] = useState({ isOpen: false, initialName: "", mode: "create", item: null });
     const [moveModal, setMoveModal] = useState({ isOpen: false, item: null });
     const [infoModalOpen, setInfoModalOpen] = useState(false);
-    const [viewerLogsModalOpen, setViewerLogsModalOpen] = useState(false);
-    const [peepeeLogsModalOpen, setPeepeeLogsModalOpen] = useState(false);
+    const [logsModalOpen, setLogsModalOpen] = useState(false);
     const [storageUsed, setStorageUsed] = useState(0);
     const [updateTrigger, setUpdateTrigger] = useState(0);
 
@@ -560,8 +559,7 @@ function DriveContent() {
                     viewMode={viewMode}
                     setViewMode={setViewMode}
                     onInfoClick={() => setInfoModalOpen(true)}
-                    onViewerLogsClick={() => setViewerLogsModalOpen(true)}
-                    onPeepeeLogsClick={() => setPeepeeLogsModalOpen(true)}
+                    onLogsClick={() => setLogsModalOpen(true)}
                 />
 
                 <div className="flex-1 overflow-y-auto p-4 md:p-6 relative selecto-container">
@@ -826,9 +824,9 @@ function DriveContent() {
 
             {infoModalOpen && <FolderInfoModal folder={folderData?.folder} onClose={() => setInfoModalOpen(false)} />}
 
-
-            <LogsModal isOpen={viewerLogsModalOpen} onClose={() => setViewerLogsModalOpen(false)} type="viewer" />
-            <LogsModal isOpen={peepeeLogsModalOpen} onClose={() => setPeepeeLogsModalOpen(false)} type="peepee" />
+            {isMaster && (
+                <LogsModal isOpen={logsModalOpen} onClose={() => setLogsModalOpen(false)} />
+            )}
         </div>
     );
 }
