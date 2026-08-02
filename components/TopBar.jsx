@@ -22,6 +22,7 @@ export default function TopBar({ searchQuery, setSearchQuery, viewMode, setViewM
                         placeholder="Search in Drive"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
+                        maxLength={100}
                     />
                 </div>
             </div>
