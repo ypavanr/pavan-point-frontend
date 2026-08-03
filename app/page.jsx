@@ -824,8 +824,7 @@ function DriveContent() {
                 onSaved={refreshView}
             />
 
-            {infoModalOpen && <FolderInfoModal folder={folderData?.folder} onClose={() => setInfoModalOpen(false)} />}
-
+            {infoModalOpen && <FolderInfoModal isOpen={infoModalOpen} folder={folderData?.folder} onClose={() => setInfoModalOpen(false)} />}
             {isMaster && (
                 <LogsModal isOpen={logsModalOpen} onClose={() => setLogsModalOpen(false)} />
             )}
